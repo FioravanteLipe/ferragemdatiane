@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* Cores da marca Ferragem da Tiane */
+@theme {
+  --color-marca: #f7b52c;          /* amarelo da logo */
+  --color-marca-clara: #fff4d6;
+  --color-marca-escura: #b07800;   /* amarelo escuro para textos/gráficos no branco */
+  --color-tinta: #161616;          /* preto da logo */
+  --color-tinta-2: #2a2a2a;
+  --color-fundo: #f6f5f1;
+  --color-borda: #e6e2d8;
+  --color-suave: #6b665c;          /* texto secundário */
+  --color-ok: #1f8a4c;
+  --color-ok-claro: #e3f4ea;
+  --color-alerta: #c2410c;
+  --color-alerta-claro: #ffedd5;
+  --color-erro: #c0262d;
+  --color-erro-claro: #fde4e4;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-saira), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-fundo);
+  color: var(--color-tinta);
+  font-family: var(--font-sans);
+}
+
+/* Números alinhados em tabelas e totais */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-borda bg-white shadow-[0_1px_2px_rgba(22,22,22,0.04)];
+  }
+  .rotulo {
+    @apply mb-1 block text-sm font-medium text-tinta-2;
+  }
+  .campo {
+    @apply w-full rounded-xl border border-borda bg-white px-3.5 py-2.5 text-base text-tinta outline-none transition placeholder:text-suave/70 focus:border-marca focus:ring-4 focus:ring-marca/25 disabled:bg-fundo;
+  }
+  .btn-marca {
+    @apply btn bg-marca text-tinta hover:bg-[#f0a813] focus-visible:ring-4 focus-visible:ring-marca/40;
+  }
+  .btn-escuro {
+    @apply btn bg-tinta text-white hover:bg-tinta-2 focus-visible:ring-4 focus-visible:ring-tinta/30;
+  }
+  .btn-claro {
+    @apply btn border border-borda bg-white text-tinta hover:bg-fundo focus-visible:ring-4 focus-visible:ring-marca/30;
+  }
+  .btn-perigo {
+    @apply btn bg-erro text-white hover:bg-[#a51f25];
+  }
+  .tabela th {
+    @apply bg-fundo px-4 py-2.5 text-left text-xs font-semibold tracking-wide text-suave uppercase;
+  }
+  .tabela td {
+    @apply border-t border-borda px-4 py-3 align-middle;
+  }
+}
