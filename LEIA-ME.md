@@ -46,6 +46,11 @@
    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
    ```
 
+### 2.6 Ligar o celular como leitor de código de barras
+1. No **SQL Editor**, clique em **New query**.
+2. Abra o arquivo [`supabase/02_leitor_celular.sql`](supabase/02_leitor_celular.sql), copie **tudo**, cole e clique em **Run**.
+3. Deve aparecer **"Success. No rows returned"**. No **Table Editor** passam a aparecer também `pareamentos` e `leituras_celular`.
+
 ## Parte 3: rodar no computador
 
 No terminal do VS Code (menu **Terminal** > **New Terminal**):
@@ -61,13 +66,13 @@ Abra **http://localhost:3000** e entre com o e-mail e a senha do passo 2.4.
 
 | Aba | Para que serve |
 |---|---|
-| **Venda** | Passe o leitor USB (ou toque em *Câmera* no celular) ou digite o nome. `3*código` lança 3 unidades. **F2** finaliza. Em dinheiro, o troco é calculado na hora. |
+| **Venda** | Passe o leitor USB (ou toque em *Câmera* no celular) ou digite o nome. `3*código` lança 3 unidades. **F2** finaliza. Em dinheiro, o troco é calculado na hora. O botão **Celular** mostra um QR code: leia com o celular e ele vira um leitor que manda cada código direto para a venda (vale 8 horas ou até fechar o caixa). |
 | **Dashboard e Estoque** | Faturamento e lucro de hoje e do período, gráfico por dia, mais vendidos, valor do estoque. Na tabela: **Entrada** (chegou mercadoria) e **Corrigir** (após contar a prateleira). |
 | **Produtos** | Cadastro com código de barras, custo, preço (mostra a margem), estoque e **estoque mínimo**. |
 | **Reposição** | Os produtos entram aqui **sozinhos** quando chegam no mínimo, e o sino no topo avisa. **Comprei** dá entrada no estoque. **Copiar lista** gera a lista para mandar no WhatsApp. |
 | **Caixa** | Abrir com o troco inicial, registrar sangria/suprimento e **fechar**: conte cédulas e moedas, digite o que a maquininha e o Pix mostram, e o sistema aponta a diferença de cada forma de pagamento. |
 
-> A câmera do celular só funciona no site publicado (https). Em `localhost`, só no próprio computador.
+> A câmera do celular só funciona no site publicado (https). Em `localhost`, só no próprio computador. Por isso o botão **Celular** só funciona de verdade depois da Parte 4.
 
 ## Parte 4: publicar na internet (Vercel), quando quiser
 Este passo fica para depois. Quando chegar a hora, eu te passo o passo a passo (GitHub + Vercel + chaves).

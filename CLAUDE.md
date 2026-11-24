@@ -53,6 +53,13 @@ Sistema web de PDV, estoque e reposição para uma loja. Responder sempre em por
 - Código das 5 abas pronto (Next.js 16 + Tailwind 4, `cacheComponents` ligado; páginas são client components).
 - Banco: `supabase/01_estrutura.sql` (testado em PGlite: venda, troco, baixa de estoque, reposição automática, comprei, caixa, dashboard, RLS).
 - Passo a passo do usuário em `LEIA-ME.md`. **Falta o usuário criar o projeto no Supabase e o `.env.local`.**
-- Decisão minha (confirmar com o usuário): venda **não é bloqueada** por estoque insuficiente; o sistema só avisa e o estoque pode ficar negativo.
+- Confirmado pelo usuário: venda **não é bloqueada** por estoque insuficiente; o sistema só avisa e o estoque pode ficar negativo.
 - Next 16: middleware agora é `src/proxy.ts`. Ler `node_modules/next/dist/docs/` antes de mexer em APIs do Next.
 - Próximos: deploy na Vercel; push no celular (PWA).
+
+## Celular como leitor (24/11/2026)
+- Aprovado: botão "Celular" na Venda gera QR com token aleatório (8h). A página `/leitor` abre sem login (liberada no proxy), lê com a câmera e envia cada código; a Venda recebe pelo Realtime (postgres_changes) e adiciona como o leitor USB.
+- Banco em `supabase/02_leitor_celular.sql` (roda depois do 01). Só o hash do token fica no banco; o token vai no `#` da URL. Anon só executa `conectar_leitor`, `enviar_leitura` e `desconectar_leitor`. QR novo, desconectar ou fechar o caixa (gatilho) revogam o token. Limite de 20 leituras em 10s. Testado em PGlite.
+- Decidido: 1 celular por vez; cada leitura = quantidade 1; só funciona com caixa aberto.
+- Só dá para testar de verdade com o site publicado (https). Se a Venda não estiver aberta no notebook, a leitura se perde; em duas abas, entra nas duas.
+- Pendente do pedido anterior (interrompido pelo usuário): aba de vendas do dia com exclusão por senha e forma de pagamento "Nota". Não retomar sem ele pedir.

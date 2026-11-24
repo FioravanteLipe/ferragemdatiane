@@ -8,6 +8,9 @@ export async function proxy(request: NextRequest) {
   // Sem Supabase configurado, as telas mostram um aviso de configuração.
   if (!url || !key) return NextResponse.next();
 
+  // O leitor do celular abre sem login: quem protege é o token do QR code.
+  if (request.nextUrl.pathname.startsWith("/leitor")) return NextResponse.next();
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(url, key, {

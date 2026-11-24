@@ -11,12 +11,14 @@ import {
   QrCode,
   ScanBarcode,
   ShoppingCart,
+  Smartphone,
   Trash2,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { useAvisos } from "@/components/Avisos";
+import { ConectarCelular, useLeitorCelular } from "@/components/ConectarCelular";
 import { LeitorCamera } from "@/components/LeitorCamera";
 import { Modal } from "@/components/Modal";
 import { brl, centavos, FORMAS_PAGAMENTO, lerValor, type FormaPagamento } from "@/lib/formato";
@@ -54,6 +56,7 @@ export default function Venda() {
   const [selecionado, setSelecionado] = useState(0);
   const [buscando, setBuscando] = useState(false);
   const [camera, setCamera] = useState(false);
+  const [celularAberto, setCelularAberto] = useState(false);
   const [pagando, setPagando] = useState(false);
   const [ultimaVenda, setUltimaVenda] = useState<VendaConcluida | null>(null);
   const [caixaAberto, setCaixaAberto] = useState<boolean | null>(null);
@@ -148,6 +151,17 @@ export default function Venda() {
     [adicionar, avisar],
   );
 
+  const celular = useLeitorCelular(async (codigo) => {
+    const r = await buscarCodigo(codigo);
+    if (r === null) avisar(`Código ${codigo} não cadastrado.`, "erro");
+  });
+  const celularConectado = Boolean(celular.pareamento?.conectado_em);
+
+  async function abrirCelular() {
+    if (!celular.pareamento && !(await celular.gerar())) return;
+    setCelularAberto(true);
+  }
+
   async function aoTeclar(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -231,6 +245,16 @@ export default function Venda() {
             <button onClick={() => setCamera(true)} className="btn-escuro px-4" aria-label="Ler pela câmera" title="Ler pela câmera">
               <Camera className="size-5" />
               <span className="hidden sm:inline">Câmera</span>
+            </button>
+            <button
+              onClick={abrirCelular}
+              disabled={celular.gerando}
+              className={`${celularConectado ? "btn-marca" : "btn-claro"} px-4`}
+              aria-label={celularConectado ? "Celular conectado como leitor" : "Usar o celular como leitor"}
+              title={celularConectado ? "Celular conectado como leitor" : "Usar o celular como leitor"}
+            >
+              {celular.gerando ? <Loader2 className="size-5 animate-spin" /> : <Smartphone className="size-5" />}
+              <span className="hidden sm:inline">{celularConectado ? "Conectado" : "Celular"}</span>
             </button>
           </div>
           <p className="mt-2 px-1 text-xs text-suave">
@@ -372,6 +396,19 @@ export default function Venda() {
           if (r === null) avisar(`Código ${codigo} não cadastrado.`, "erro");
         }}
       />
+
+      {celularAberto && (
+        <ConectarCelular
+          pareamento={celular.pareamento}
+          gerando={celular.gerando}
+          aoGerar={celular.gerar}
+          aoDesconectar={celular.desconectar}
+          aoFechar={() => {
+            setCelularAberto(false);
+            focarBusca();
+          }}
+        />
+      )}
 
       {pagando && (
       <Pagamento
